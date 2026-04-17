@@ -569,13 +569,15 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
+  padding: 0 4px;
 }
 
-.column-title {
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--text-main);
+.column-title-badge {
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
 }
+
 
 .column-count {
   background-color: white;

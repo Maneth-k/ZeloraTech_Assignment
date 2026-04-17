@@ -1,7 +1,7 @@
 import { Plus, UserSearch, MapPin, User, ChevronDown } from "lucide-react";
 
 export default function JobHeader() {
-  const tabs = ["Candidates", "Job Info", "Calendar", "Notes", "Matches"];
+  const tabs = ["Candidates", "Job Info", "Calendar", "Score Card", "Activity","Apllication Form", "Automation"];
 
   return (
     <div className="job-header">

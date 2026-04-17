@@ -10,10 +10,10 @@ import KanbanBoard from "./components/KanbanBoard";
 const API_URL = "http://localhost:5000/api/candidates";
 
 const COLUMNS = [
-  { id: "Applying Period", title: "Applying Period" },
-  { id: "Screening", title: "Screening" },
-  { id: "Interview", title: "Interview" },
-  { id: "Test", title: "Test" },
+  { id: "Applying Period", title: "Applying Period", color: "#FF7D01" },
+  { id: "Screening", title: "Screening", color: "#C474CD" },
+  { id: "Interview", title: "Interview", color: "#1D79BC" },
+  { id: "Test", title: "Test", color: "#50C7CB" },
 ];
 
 function App() {

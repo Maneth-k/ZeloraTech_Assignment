@@ -14,6 +14,7 @@ export default function KanbanBoard({ columns, candidates, onDragEnd }) {
                 id={column.id}
                 title={column.title}
                 candidates={columnCandidates}
+                color={column.color}
               />
             );
           })}
