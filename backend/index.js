@@ -1,8 +1,8 @@
-const express = require('express');
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const fs = require('fs');
-const path = require('path');
+const express = require("express");
+const cors = require("cors");
+const bodyParser = require("body-parser");
+const fs = require("fs");
+const path = require("path");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -14,48 +14,52 @@ let candidates = [
   {
     id: "1",
     name: "Cody Fisher",
+    avatar: "https://ui-avatars.com/api/?name=Cody+Fisher&background=random",
     stage: "Applying Period",
     applicationDate: "2026-04-01",
-    overallScore: 85,
+    overallScore: "8.5",
     referral: "LinkedIn",
-    assessmentStatus: "Pending"
+    assessmentStatus: "Pending",
   },
   {
     id: "2",
     name: "Esther Howard",
+    avatar: "https://ui-avatars.com/api/?name=Esther+Howard&background=random",
     stage: "Screening",
     applicationDate: "2026-04-02",
-    overallScore: 92,
+    overallScore: "9.2",
     referral: "Internal",
-    assessmentStatus: "Passed"
+    assessmentStatus: "Passed",
   },
   {
     id: "3",
     name: "Jenny Wilson",
+    avatar: "https://ui-avatars.com/api/?name=Jenny+Wilson&background=random",
     stage: "Interview",
     applicationDate: "2026-04-03",
-    overallScore: 78,
+    overallScore: "7.8",
     referral: "Indeed",
-    assessmentStatus: "Passed"
+    assessmentStatus: "Passed",
   },
   {
     id: "4",
     name: "Kristin Watson",
+    avatar: "https://ui-avatars.com/api/?name=Kristin+Watson&background=random",
     stage: "Test",
     applicationDate: "2026-04-04",
-    overallScore: 88,
+    overallScore: "8.8",
     referral: "Referral",
-    assessmentStatus: "Pending"
-  }
+    assessmentStatus: "Pending",
+  },
 ];
 
 // Read all candidates
-app.get('/api/candidates', (req, res) => {
+app.get("/api/candidates", (req, res) => {
   let filtered = candidates;
   if (req.query.stage) {
-    filtered = candidates.filter(c => c.stage === req.query.stage);
+    filtered = candidates.filter((c) => c.stage === req.query.stage);
   }
-  
+
   if (req.query.sortBy) {
     const sortBy = req.query.sortBy;
     filtered.sort((a, b) => {
@@ -68,8 +72,8 @@ app.get('/api/candidates', (req, res) => {
 });
 
 // Read single candidate
-app.get('/api/candidates/:id', (req, res) => {
-  const candidate = candidates.find(c => c.id === req.params.id);
+app.get("/api/candidates/:id", (req, res) => {
+  const candidate = candidates.find((c) => c.id === req.params.id);
   if (candidate) {
     res.json(candidate);
   } else {
@@ -78,19 +82,20 @@ app.get('/api/candidates/:id', (req, res) => {
 });
 
 // Create candidate
-app.post('/api/candidates', (req, res) => {
+app.post("/api/candidates", (req, res) => {
   const newCandidate = {
     id: Date.now().toString(),
     ...req.body,
-    applicationDate: req.body.applicationDate || new Date().toISOString().split('T')[0],
+    applicationDate:
+      req.body.applicationDate || new Date().toISOString().split("T")[0],
   };
   candidates.push(newCandidate);
   res.status(201).json(newCandidate);
 });
 
 // Update candidate
-app.put('/api/candidates/:id', (req, res) => {
-  const index = candidates.findIndex(c => c.id === req.params.id);
+app.put("/api/candidates/:id", (req, res) => {
+  const index = candidates.findIndex((c) => c.id === req.params.id);
   if (index !== -1) {
     candidates[index] = { ...candidates[index], ...req.body };
     res.json(candidates[index]);
@@ -100,8 +105,8 @@ app.put('/api/candidates/:id', (req, res) => {
 });
 
 // Delete candidate
-app.delete('/api/candidates/:id', (req, res) => {
-  const index = candidates.findIndex(c => c.id === req.params.id);
+app.delete("/api/candidates/:id", (req, res) => {
+  const index = candidates.findIndex((c) => c.id === req.params.id);
   if (index !== -1) {
     const deleted = candidates.splice(index, 1);
     res.json(deleted[0]);
