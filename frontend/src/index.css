@@ -306,16 +306,95 @@ body {
   font-weight: 600;
 }
 
-.status-badge {
-  display: inline-block;
-  background-color: #d1fae5;
-  color: #059669;
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 500;
-  width: fit-content;
+.job-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
 }
+
+.status-dropdown {
+  display: flex;
+  align-items: center;
+  background-color: #d1fae5;
+  padding: 2px 8px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: var(--transition);
+  border: 1px solid transparent;
+}
+
+.status-dropdown:hover {
+  background-color: #a7f3d0;
+  border-color: #059669;
+}
+
+.status-dropdown select {
+  background: transparent;
+  border: none;
+  color: #059669;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  outline: none;
+  padding: 2px 4px;
+  appearance: none; /* Remove default arrow */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  display: flex;
+  align-items: center;
+}
+
+/* Add custom arrow via CSS since we removed the icon */
+.status-dropdown::after {
+  content: "";
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid #059669;
+  margin-left: 2px;
+  pointer-events: none;
+}
+
+
+.meta-dot {
+  color: var(--text-muted);
+  font-weight: 800;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.meta-icon {
+  color: var(--text-muted);
+}
+
+.creator-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.creator-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.creator-name {
+  color: var(--text-main);
+  font-weight: 600;
+}
+
 
 .primary-btn {
   display: flex;
@@ -426,22 +505,43 @@ body {
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  padding: 6px 12px;
+  padding: 8px 12px;
   border-radius: 8px;
   transition: var(--transition);
 }
 
-.filter-btn:hover {
-  background-color: var(--bg-color);
+.filter-dropdown-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: white;
+  border: 1px solid var(--border-light);
+  padding: 8px 12px;
+  border-radius: 10px;
+  color: var(--text-main);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  min-width: 140px;
 }
 
-.filter-icon {
+.filter-btn-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filter-dropdown-btn:hover {
+  background-color: var(--bg-color);
+  border-color: #cbd5e1;
+}
+
+.filter-chevron {
   color: var(--text-muted);
 }
 
-.advance-filter {
-  margin-left: auto;
-}
 
 /* KANBAN BOARD */
 .kanban-wrapper {

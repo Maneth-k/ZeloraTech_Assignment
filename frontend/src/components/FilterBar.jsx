@@ -1,4 +1,14 @@
-import { Search, Calendar, Star, SlidersHorizontal } from "lucide-react";
+import { Search, Calendar, Star, SlidersHorizontal, ChevronDown } from "lucide-react";
+
+const FilterButton = ({ icon: Icon, text }) => (
+  <button className="filter-dropdown-btn">
+    <div className="filter-btn-left">
+      <Icon size={16} className="filter-icon" />
+      <span>{text}</span>
+    </div>
+    <ChevronDown size={14} className="filter-chevron" />
+  </button>
+);
 
 export default function FilterBar() {
   return (
@@ -10,24 +20,15 @@ export default function FilterBar() {
       
       <div className="filter-divider"></div>
       
-      <button className="filter-btn">
-        <Calendar size={16} className="filter-icon" />
-        Date Range
-      </button>
+      <FilterButton icon={Calendar} text="Date Range" />
       
       <div className="filter-divider"></div>
       
-      <button className="filter-btn">
-        <Star size={16} className="filter-icon" />
-        Score Range
-      </button>
+      <FilterButton icon={Star} text="Score Range" />
 
       <div className="filter-divider"></div>
 
-      <button className="filter-btn advance-filter">
-        <SlidersHorizontal size={16} className="filter-icon" />
-        Advance Filter
-      </button>
+      <FilterButton icon={SlidersHorizontal} text="Advance Filter" />
     </div>
   );
 }
