@@ -1,7 +1,16 @@
 import { Plus, UserSearch, MapPin, User, ChevronDown } from "lucide-react";
+import { useState } from "react";
+import AddCandidateModal from "./AddCandidateModal";
 
 export default function JobHeader() {
   const tabs = ["Candidates", "Job Info", "Calendar", "Score Card", "Activity","Apllication Form", "Automation"];
+  const [showModal, setShowModal] = useState(false);
+
+  const handleModalSuccess = () => {
+    setShowModal(false);
+    alert("Candidate added to MongoDB successfully!");
+    // Later we can trigger a refresh function here from props if needed
+  };
 
   return (
     <div className="job-header">
@@ -44,7 +53,7 @@ export default function JobHeader() {
             </div>
           </div>
         </div>
-        <button className="primary-btn">
+        <button className="primary-btn" onClick={() => setShowModal(true)}>
           <Plus size={16} />
           Add Candidate
         </button>
@@ -60,6 +69,13 @@ export default function JobHeader() {
           </button>
         ))}
       </div>
+
+      {showModal && (
+        <AddCandidateModal 
+          onClose={() => setShowModal(false)} 
+          onSuccess={handleModalSuccess} 
+        />
+      )}
     </div>
   );
 }

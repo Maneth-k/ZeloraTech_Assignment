@@ -3,12 +3,19 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const fs = require("fs");
 const path = require("path");
+const mongoose = require("mongoose");
+const candidateRoutes = require("./routes/candidateRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(bodyParser.json());
+
+// Connect to MongoDB
+mongoose.connect("mongodb://127.0.0.1:27017/recruitment")
+  .then(() => console.log("Connected to MongoDB successfully"))
+  .catch((err) => console.error("MongoDB connection error:", err));
 
 let candidates = [
   {
@@ -53,6 +60,9 @@ let candidates = [
   },
 ];
 
+// Use routes from controller for create
+app.use("/api/db-candidates", candidateRoutes);
+
 // Read all candidates
 app.get("/api/candidates", (req, res) => {
   let filtered = candidates;
@@ -81,7 +91,7 @@ app.get("/api/candidates/:id", (req, res) => {
   }
 });
 
-// Create candidate
+// Create candidate (Legacy - keeping it since frontend might use it or I can override it)
 app.post("/api/candidates", (req, res) => {
   const newCandidate = {
     id: Date.now().toString(),
