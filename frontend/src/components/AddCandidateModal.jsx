@@ -1,68 +1,78 @@
 import { useState } from "react";
 import { X } from "lucide-react";
+import { useMutation } from "@tanstack/react-query";
 import "./AddCandidateModal.css";
 
-export default function AddCandidateModal({ onClose, onSuccess }) {
-  const [formData, setFormData] = useState({
-    name: "",
-    stage: "Applying Period",
-    applicationDate: new Date().toISOString().split("T")[0],
-    overallScore: 0,
-    referral: "Direct",
-    assessmentStatus: "Pending",
+export default function AddCandidateModal({ onClose, onSuccess, initialData }) {
+  // If initialData exists, use it to pre-fill the form, otherwise use default values
+  const [formData, setFormData] = useState(
+    initialData || {
+      name: "",
+      stage: "Applying Period",
+      applicationDate: new Date().toISOString().split("T")[0],
+      overallScore: 0,
+      referral: "Direct",
+      assessmentStatus: "Pending",
+    }
+  );
+
+  const mutation = useMutation({
+    mutationFn: async (candidateData) => {
+      const isEdit = !!initialData;
+      const url = isEdit
+        ? `http://localhost:5000/api/candidates/${initialData.id}`
+        : "http://localhost:5000/api/candidates";
+      const method = isEdit ? "PUT" : "POST";
+
+      const res = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(candidateData),
+      });
+      if (!res.ok) throw new Error(isEdit ? "Failed to update candidate" : "Failed to add candidate");
+      return res.json();
+    },
+    onSuccess: () => {
+      onSuccess();
+    },
+    onError: (error) => {
+      console.error(error);
+      alert(initialData ? "Error updating candidate." : "Error adding candidate.");
+    },
   });
-  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setLoading(true);
-    try {
-      const res = await fetch("http://localhost:5000/api/db-candidates", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...formData,
-          overallScore: Number(formData.overallScore), // Ensure number
-        }),
-      });
-
-      if (res.ok) {
-        onSuccess();
-      } else {
-        alert("Failed to add candidate");
-      }
-    } catch (error) {
-      console.error(error);
-      alert("Error adding candidate.");
-    } finally {
-      setLoading(false);
-    }
+    mutation.mutate({
+      ...formData,
+      overallScore: Number(formData.overallScore),
+    });
   };
 
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h2>Add New Candidate</h2>
+          <h2>{initialData ? "Update Candidate" : "Add New Candidate"}</h2>
           <button className="close-btn" onClick={onClose}>
             <X size={20} />
           </button>
         </div>
-        
+
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label>Name</label>
-            <input 
-              required 
-              type="text" 
-              name="name" 
-              value={formData.name} 
-              onChange={handleChange} 
+            <input
+              required
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
               placeholder="e.g. John Doe"
             />
           </div>
@@ -79,44 +89,53 @@ export default function AddCandidateModal({ onClose, onSuccess }) {
 
           <div className="form-group">
             <label>Application Date</label>
-            <input 
-              required 
-              type="date" 
-              name="applicationDate" 
-              value={formData.applicationDate} 
-              onChange={handleChange} 
+            <input
+              required
+              type="date"
+              name="applicationDate"
+              value={
+                // ensure format is valid for input type="date"
+                formData.applicationDate && typeof formData.applicationDate === 'string'
+                  ? formData.applicationDate.split("T")[0]
+                  : formData.applicationDate
+              }
+              onChange={handleChange}
             />
           </div>
 
           <div className="form-group">
             <label>Overall Score</label>
-            <input 
-              required 
-              type="number" 
+            <input
+              required
+              type="number"
               step="0.1"
               min="0"
               max="10"
-              name="overallScore" 
-              value={formData.overallScore} 
-              onChange={handleChange} 
+              name="overallScore"
+              value={formData.overallScore}
+              onChange={handleChange}
             />
           </div>
 
           <div className="form-group">
             <label>Referral Status</label>
-            <input 
-              required 
-              type="text" 
-              name="referral" 
-              value={formData.referral} 
-              onChange={handleChange} 
+            <input
+              required
+              type="text"
+              name="referral"
+              value={formData.referral}
+              onChange={handleChange}
               placeholder="e.g. LinkedIn, Internal, Direct"
             />
           </div>
 
           <div className="form-group">
             <label>Assessment Status</label>
-            <select name="assessmentStatus" value={formData.assessmentStatus} onChange={handleChange}>
+            <select
+              name="assessmentStatus"
+              value={formData.assessmentStatus}
+              onChange={handleChange}
+            >
               <option value="Pending">Pending</option>
               <option value="Passed">Passed</option>
               <option value="Failed">Failed</option>
@@ -124,9 +143,15 @@ export default function AddCandidateModal({ onClose, onSuccess }) {
           </div>
 
           <div className="modal-footer">
-            <button type="button" className="cancel-btn" onClick={onClose}>Cancel</button>
-            <button type="submit" className="submit-btn" disabled={loading}>
-              {loading ? "Saving..." : "Save Candidate"}
+            <button type="button" className="cancel-btn" onClick={onClose}>
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="submit-btn"
+              disabled={mutation.isPending}
+            >
+              {mutation.isPending ? "Saving..." : (initialData ? "Update Candidate" : "Save Candidate")}
             </button>
           </div>
         </form>

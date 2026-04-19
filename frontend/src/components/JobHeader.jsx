@@ -1,15 +1,17 @@
 import { Plus, UserSearch, MapPin, User, ChevronDown } from "lucide-react";
 import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import AddCandidateModal from "./AddCandidateModal";
 
-export default function JobHeader() {
-  const tabs = ["Candidates", "Job Info", "Calendar", "Score Card", "Activity","Apllication Form", "Automation"];
+export default function JobHeader({ activeTab, setActiveTab }) {
+  const tabs = ["Candidates", "Job Info", "Calendar", "Score Card", "Activity", "Application Form", "Automation"];
   const [showModal, setShowModal] = useState(false);
+  const queryClient = useQueryClient();
 
   const handleModalSuccess = () => {
     setShowModal(false);
-    alert("Candidate added to MongoDB successfully!");
-    // Later we can trigger a refresh function here from props if needed
+    queryClient.invalidateQueries({ queryKey: ["candidates"] });
+    alert("Candidate added successfully!");
   };
 
   return (
@@ -63,7 +65,8 @@ export default function JobHeader() {
         {tabs.map((tab) => (
           <button
             key={tab}
-            className={`tab-btn ${tab === "Candidates" ? "active" : ""}`}
+            className={`tab-btn ${activeTab === tab ? "active" : ""}`}
+            onClick={() => setActiveTab(tab)}
           >
             {tab}
           </button>

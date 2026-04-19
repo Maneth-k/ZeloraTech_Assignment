@@ -687,6 +687,55 @@ body {
   color: var(--text-main);
 }
 
+.menu-wrapper {
+  position: relative;
+}
+
+.card-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: white;
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 8px;
+  min-width: 150px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 12px;
+  background: none;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-main);
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: left;
+}
+
+.dropdown-item:hover {
+  background-color: var(--bg-color);
+}
+
+.delete-item {
+  color: #ef4444;
+}
+
+.delete-item:hover {
+  background-color: #fef2f2;
+}
+
 .card-metrics {
   margin-bottom: 20px;
 }
@@ -720,4 +769,207 @@ body {
   border-radius: 6px;
   font-size: 12px;
   font-weight: 600;
+}
+
+/* TAB PLACEHOLDER */
+.tab-placeholder {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border-radius: 16px;
+  border: 1px dashed var(--border-light);
+  margin-top: 24px;
+}
+
+.placeholder-content {
+  text-align: center;
+}
+
+.placeholder-content h2 {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 8px;
+}
+
+.placeholder-content p {
+  color: var(--text-muted);
+}
+
+/* RESPONSIVE MEDIA QUERIES */
+
+/* Tablet (Large) */
+@media (max-width: 1024px) {
+  .content-wrapper {
+    padding: 24px 20px;
+  }
+  
+  .stats {
+    gap: 16px;
+  }
+  
+  .kanban-board {
+    gap: 16px;
+  }
+}
+
+/* Tablet (Small) / Mobile (Large) */
+@media (max-width: 850px) {
+  .stats {
+    display: none; /* Hide middle stats on small tablets/mobile to save space */
+  }
+  
+  .job-header-top {
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .primary-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .filter-bar {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  
+  .filter-divider {
+    display: none; /* Hide dividers when wrapping */
+  }
+  
+  .search-filter {
+    max-width: none;
+    order: -1;
+    width: 100%; /* Force search to full width on wrap */
+  }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .layout {
+    flex-direction: column;
+    overflow-x: hidden;
+  }
+  
+  .sidebar {
+    width: 100%;
+    height: 60px;
+    flex-direction: row;
+    padding: 0 16px;
+    border-right: none;
+    border-top: 1px solid var(--border-light);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+  }
+  
+  .sidebar-logo {
+    display: none;
+  }
+  
+  .sidebar-nav {
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+    padding: 0;
+    gap: 0;
+  }
+  
+  .sidebar-bottom {
+    display: none;
+  }
+  
+  .nav-item {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .main-content {
+    height: 100vh;
+    padding-bottom: 60px; /* Space for the fixed bottom nav */
+    overflow-x: hidden;
+  }
+  
+  .top-nav {
+    padding: 0 16px;
+    height: 60px;
+  }
+  
+  .logo-text {
+    font-size: 16px;
+    letter-spacing: 2px;
+  }
+  
+  .content-wrapper {
+    padding: 16px;
+    overflow-x: hidden;
+  }
+  
+  .job-tabs {
+    gap: 16px;
+    overflow-x: auto;
+    scrollbar-width: none; /* Hide scrollbar Firefox */
+  }
+  
+  .job-tabs::-webkit-scrollbar {
+    display: none; /* Hide scrollbar Chrome/Safari */
+  }
+  
+  .tab-btn {
+    white-space: nowrap;
+    font-size: 14px;
+  }
+  
+  .job-title-wrapper h1 {
+    font-size: 20px;
+  }
+  
+  .filter-dropdown-btn {
+    flex: 1;
+    min-width: 120px;
+    font-size: 13px;
+    padding: 8px;
+  }
+  
+  .board-scroll-area {
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding-right: 4px; /* Space for scrollbar */
+  }
+
+  .kanban-board {
+    flex-direction: column;
+    height: auto;
+    gap: 32px;
+    padding-bottom: 32px;
+  }
+  
+  .kanban-column {
+    width: 100%;
+    min-width: unset;
+    height: auto;
+  }
+
+  .column-content {
+    min-height: 120px;
+    overflow-y: visible; /* Prevent internal column scroll; entire board scrolls */
+  }
+
+  /* Modal Responsiveness */
+  .modal-content {
+    width: 95%;
+    max-height: 90vh;
+    padding: 20px;
+  }
+}
+
+/* Height adjustments for small devices */
+@media (max-height: 700px) {
+  .sidebar-nav {
+    gap: 12px;
+  }
 }

@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
+import { useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import "./index.css";
 import Sidebar from "./components/Sidebar";
 import TopNav from "./components/TopNav";
 import JobHeader from "./components/JobHeader";
 import FilterBar from "./components/FilterBar";
 import KanbanBoard from "./components/KanbanBoard";
+import TabPlaceholder from "./components/TabPlaceholder";
 
 const API_URL = "http://localhost:5000/api/candidates";
 
@@ -17,28 +18,49 @@ const COLUMNS = [
 ];
 
 function App() {
-  const [candidates, setCandidates] = useState([]);
+  const [activeTab, setActiveTab] = useState("Candidates");
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    fetchCandidates();
-  }, []);
+  // Fetch candidates using React Query
+  const { data: candidates = [], isLoading, isError } = useQuery({
+    queryKey: ["candidates"],
+    queryFn: async () => {
+      const response = await fetch(API_URL);
+      if (!response.ok) throw new Error("Network response was not ok");
+      return response.json();
+    },
+  });
 
-  const fetchCandidates = async () => {
-    try {
-      const response = await axios.get(API_URL);
-      setCandidates(response.data);
-    } catch (error) {
-      console.error("Error fetching candidates:", error);
-    }
-  };
+  // Mutation for updating candidate stage
+  const updateMutation = useMutation({
+    mutationFn: async ({ id, stage }) => {
+      const response = await fetch(`${API_URL}/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ stage }),
+      });
+      if (!response.ok) throw new Error("Failed to update candidate");
+      return response.json();
+    },
+    // Optimistic Update
+    onMutate: async ({ id, stage }) => {
+      await queryClient.cancelQueries({ queryKey: ["candidates"] });
+      const previousCandidates = queryClient.getQueryData(["candidates"]);
 
-  const updateCandidateStage = async (id, stage) => {
-    try {
-      await axios.put(`${API_URL}/${id}`, { stage });
-    } catch (error) {
-      console.error("Error updating candidate:", error);
-    }
-  };
+      queryClient.setQueryData(["candidates"], (old) => {
+        return old.map((c) => (c.id === id ? { ...c, stage } : c));
+      });
+
+      return { previousCandidates };
+    },
+    onError: (err, variables, context) => {
+      queryClient.setQueryData(["candidates"], context.previousCandidates);
+      console.error("Error updating candidate:", err);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["candidates"] });
+    },
+  });
 
   const onDragEnd = (result) => {
     const { destination, source, draggableId } = result;
@@ -50,14 +72,11 @@ function App() {
     )
       return;
 
-    const newCandidates = Array.from(candidates);
-    const candidateIndex = newCandidates.findIndex((c) => c.id === draggableId);
-
-    newCandidates[candidateIndex].stage = destination.droppableId;
-    setCandidates([...newCandidates]);
-
-    updateCandidateStage(draggableId, destination.droppableId);
+    updateMutation.mutate({ id: draggableId, stage: destination.droppableId });
   };
+
+  if (isLoading) return <div className="loading-state">Loading Candidates...</div>;
+  if (isError) return <div className="error-state">Error fetching data. Please try again.</div>;
 
   return (
     <div className="layout">
@@ -65,15 +84,22 @@ function App() {
       <div className="main-content">
         <TopNav />
         <div className="content-wrapper">
-          <JobHeader />
-          <FilterBar />
-          <div className="board-scroll-area">
-            <KanbanBoard
-              columns={COLUMNS}
-              candidates={candidates}
-              onDragEnd={onDragEnd}
-            />
-          </div>
+          <JobHeader activeTab={activeTab} setActiveTab={setActiveTab} />
+          
+          {activeTab === "Candidates" ? (
+            <>
+              <FilterBar />
+              <div className="board-scroll-area">
+                <KanbanBoard
+                  columns={COLUMNS}
+                  candidates={candidates}
+                  onDragEnd={onDragEnd}
+                />
+              </div>
+            </>
+          ) : (
+            <TabPlaceholder name={activeTab} />
+          )}
         </div>
       </div>
     </div>
