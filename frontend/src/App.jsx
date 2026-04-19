@@ -23,14 +23,17 @@ function App() {
   const queryClient = useQueryClient();
 
   // Fetch candidates using React Query
-  const { data: candidates = [], isLoading, isError } = useQuery({
+  const { data: rawCandidates = [], isLoading, isError } = useQuery({
     queryKey: ["candidates"],
     queryFn: async () => {
       const response = await fetch(API_URL);
       if (!response.ok) throw new Error("Network response was not ok");
-      return response.json();
+      const json = await response.json();
+      return json.data || json;
     },
   });
+
+  const candidates = Array.isArray(rawCandidates) ? rawCandidates : (rawCandidates?.data || []);
 
   // Mutation for updating candidate stage
   const updateMutation = useMutation({
@@ -49,7 +52,8 @@ function App() {
       const previousCandidates = queryClient.getQueryData(["candidates"]);
 
       queryClient.setQueryData(["candidates"], (old) => {
-        return old.map((c) => (c.id === id ? { ...c, stage } : c));
+        const currentData = Array.isArray(old) ? old : (old?.data || []);
+        return currentData.map((c) => (c.id === id ? { ...c, stage } : c));
       });
 
       return { previousCandidates };

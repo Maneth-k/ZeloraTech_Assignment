@@ -35,13 +35,35 @@ const getAllCandidates = async (req, res) => {
 
     let sortOptions = {};
     if (req.query.sortBy) {
-      sortOptions[req.query.sortBy] = 1;
+      const order = req.query.sortOrder === 'desc' ? -1 : 1;
+      sortOptions[req.query.sortBy] = order;
+    } else {
+      sortOptions['applicationDate'] = -1; // Default descending sort
     }
 
-    const candidates = await Store.find(query).sort(sortOptions);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 100;
+    const skip = (page - 1) * limit;
+
+    const candidates = await Store.find(query)
+      .sort(sortOptions)
+      .skip(skip)
+      .limit(limit);
+
+    const total = await Store.countDocuments(query);
+    const totalPages = Math.ceil(total / limit);
+
     const formattedCandidates = candidates.map(c => ({ id: c._id.toString(), ...c._doc }));
     
-    res.json(formattedCandidates);
+    res.json({
+      data: formattedCandidates,
+      pagination: {
+        total,
+        page,
+        totalPages,
+        limit
+      }
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
