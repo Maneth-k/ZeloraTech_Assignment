@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { X } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 import "./AddCandidateModal.css";
 
 export default function AddCandidateModal({ onClose, onSuccess, initialData }) {
@@ -37,7 +38,7 @@ export default function AddCandidateModal({ onClose, onSuccess, initialData }) {
     },
     onError: (error) => {
       console.error(error);
-      alert(initialData ? "Error updating candidate." : "Error adding candidate.");
+      toast.error(initialData ? "Error updating candidate." : "Error adding candidate.");
     },
   });
 

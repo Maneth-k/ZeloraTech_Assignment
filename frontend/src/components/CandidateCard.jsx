@@ -2,6 +2,7 @@ import { MoreHorizontal, Star, Edit, Trash2 } from "lucide-react";
 import { Draggable } from "@hello-pangea/dnd";
 import { useState, useRef, useEffect } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 import AddCandidateModal from "./AddCandidateModal";
 
 export default function CandidateCard({ candidate, index }) {
@@ -33,10 +34,11 @@ export default function CandidateCard({ candidate, index }) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["candidates"] });
+      toast.success("Candidate deleted successfully!");
     },
     onError: (error) => {
       console.error("Error deleting candidate:", error);
-      alert("Failed to delete candidate.");
+      toast.error("Failed to delete candidate.");
     },
   });
 
@@ -50,6 +52,7 @@ export default function CandidateCard({ candidate, index }) {
   const handleEditSuccess = () => {
     setShowEditModal(false);
     queryClient.invalidateQueries({ queryKey: ["candidates"] });
+    toast.success("Candidate updated successfully!");
   };
 
   return (
@@ -111,8 +114,25 @@ export default function CandidateCard({ candidate, index }) {
               </div>
             </div>
 
-            <div className="card-footer">
+            <div className="card-footer" style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
               <span className="referral-tag">{candidate.referral}</span>
+              {candidate.assessmentStatus && (
+                <span 
+                  className="assessment-tag" 
+                  style={{ 
+                    fontSize: '11px', 
+                    padding: '2px 8px', 
+                    borderRadius: '12px', 
+                    backgroundColor: candidate.assessmentStatus === 'Passed' ? '#dcfce7' : candidate.assessmentStatus === 'Failed' ? '#fee2e2' : '#f3f4f6', 
+                    color: candidate.assessmentStatus === 'Passed' ? '#166534' : candidate.assessmentStatus === 'Failed' ? '#991b1b' : '#374151',
+                    fontWeight: '500',
+                    display: 'inline-flex',
+                    alignItems: 'center'
+                  }}
+                >
+                  {candidate.assessmentStatus}
+                </span>
+              )}
             </div>
           </div>
         )}

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import toast, { Toaster } from "react-hot-toast";
 import "./index.css";
 import Sidebar from "./components/Sidebar";
 import TopNav from "./components/TopNav";
@@ -56,6 +57,7 @@ function App() {
     onError: (err, variables, context) => {
       queryClient.setQueryData(["candidates"], context.previousCandidates);
       console.error("Error updating candidate:", err);
+      toast.error("Failed to update candidate stage.");
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["candidates"] });
@@ -64,7 +66,7 @@ function App() {
 
   const onDragEnd = (result) => {
     const { destination, source, draggableId } = result;
-
+    console.log(destination,source,draggableId)
     if (!destination) return;
     if (
       destination.droppableId === source.droppableId &&
@@ -80,6 +82,7 @@ function App() {
 
   return (
     <div className="layout">
+      <Toaster position="top-right" />
       <Sidebar />
       <div className="main-content">
         <TopNav />

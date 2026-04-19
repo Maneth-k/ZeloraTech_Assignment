@@ -6,7 +6,12 @@ const storeSchema = new mongoose.Schema({
   applicationDate: { type: Date, default: Date.now },
   overallScore: { type: Number, required: true },
   referral: { type: String, required: true }, // Referral status
-  assessmentStatus: { type: String, required: true },
+  assessmentStatus: { 
+    type: String, 
+    required: true,
+    enum: ['Pending', 'Passed', 'Failed'],
+    default: 'Pending'
+  },
   avatar: { type: String }
 });
 

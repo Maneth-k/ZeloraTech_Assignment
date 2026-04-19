@@ -1,6 +1,7 @@
 import { Plus, UserSearch, MapPin, User, ChevronDown } from "lucide-react";
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 import AddCandidateModal from "./AddCandidateModal";
 
 export default function JobHeader({ activeTab, setActiveTab }) {
@@ -11,7 +12,7 @@ export default function JobHeader({ activeTab, setActiveTab }) {
   const handleModalSuccess = () => {
     setShowModal(false);
     queryClient.invalidateQueries({ queryKey: ["candidates"] });
-    alert("Candidate added successfully!");
+    toast.success("Candidate added successfully!");
   };
 
   return (

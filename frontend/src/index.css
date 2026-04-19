@@ -2,7 +2,7 @@
 
 :root {
   --primary-blue: #3b82f6;
-  --bg-color: #f8fafc;
+  --bg-color: #ffffff;
   --sidebar-bg: #ffffff;
   --header-bg: #ffffff;
   --text-main: #111827;
@@ -358,7 +358,6 @@ body {
   pointer-events: none;
 }
 
-
 .meta-dot {
   color: var(--text-muted);
   font-weight: 800;
@@ -394,7 +393,6 @@ body {
   color: var(--text-main);
   font-weight: 600;
 }
-
 
 .primary-btn {
   display: flex;
@@ -542,7 +540,6 @@ body {
   color: var(--text-muted);
 }
 
-
 /* KANBAN BOARD */
 .kanban-wrapper {
   height: 100%;
@@ -577,7 +574,6 @@ body {
   font-weight: 700;
   white-space: nowrap;
 }
-
 
 .column-count {
   background-color: white;
@@ -805,11 +801,11 @@ body {
   .content-wrapper {
     padding: 24px 20px;
   }
-  
+
   .stats {
     gap: 16px;
   }
-  
+
   .kanban-board {
     gap: 16px;
   }
@@ -820,26 +816,26 @@ body {
   .stats {
     display: none; /* Hide middle stats on small tablets/mobile to save space */
   }
-  
+
   .job-header-top {
     flex-direction: column;
     gap: 16px;
   }
-  
+
   .primary-btn {
     width: 100%;
     justify-content: center;
   }
-  
+
   .filter-bar {
     flex-wrap: wrap;
     gap: 12px;
   }
-  
+
   .filter-divider {
     display: none; /* Hide dividers when wrapping */
   }
-  
+
   .search-filter {
     max-width: none;
     order: -1;
@@ -853,7 +849,7 @@ body {
     flex-direction: column;
     overflow-x: hidden;
   }
-  
+
   .sidebar {
     width: 100%;
     height: 60px;
@@ -866,11 +862,11 @@ body {
     left: 0;
     z-index: 1000;
   }
-  
+
   .sidebar-logo {
     display: none;
   }
-  
+
   .sidebar-nav {
     flex-direction: row;
     justify-content: space-around;
@@ -878,63 +874,63 @@ body {
     padding: 0;
     gap: 0;
   }
-  
+
   .sidebar-bottom {
     display: none;
   }
-  
+
   .nav-item {
     width: 40px;
     height: 40px;
   }
-  
+
   .main-content {
     height: 100vh;
     padding-bottom: 60px; /* Space for the fixed bottom nav */
     overflow-x: hidden;
   }
-  
+
   .top-nav {
     padding: 0 16px;
     height: 60px;
   }
-  
+
   .logo-text {
     font-size: 16px;
     letter-spacing: 2px;
   }
-  
+
   .content-wrapper {
     padding: 16px;
     overflow-x: hidden;
   }
-  
+
   .job-tabs {
     gap: 16px;
     overflow-x: auto;
     scrollbar-width: none; /* Hide scrollbar Firefox */
   }
-  
+
   .job-tabs::-webkit-scrollbar {
     display: none; /* Hide scrollbar Chrome/Safari */
   }
-  
+
   .tab-btn {
     white-space: nowrap;
     font-size: 14px;
   }
-  
+
   .job-title-wrapper h1 {
     font-size: 20px;
   }
-  
+
   .filter-dropdown-btn {
     flex: 1;
     min-width: 120px;
     font-size: 13px;
     padding: 8px;
   }
-  
+
   .board-scroll-area {
     overflow-x: hidden;
     overflow-y: auto;
@@ -947,7 +943,7 @@ body {
     gap: 32px;
     padding-bottom: 32px;
   }
-  
+
   .kanban-column {
     width: 100%;
     min-width: unset;
