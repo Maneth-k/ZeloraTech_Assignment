@@ -34,7 +34,7 @@ The frontend implements a Kanban-style board to view and move candidates through
 3. Establish Environment Variables:
    Create a `.env` file within the `backend` directory and add your MongoDB connection URI and desired Port:
    ```env
-   MONGO_URI=mongodb://127.0.0.1:27017/recruitment_pipeline  # Adjust according to your real MongoDB URI
+   MONGO_URI="mongodb://manethkaveen0_db_user:JKzvYAL1E0WlMInk@ac-fzxnruh-shard-00-00.lzwedug.mongodb.net:27017,ac-fzxnruh-shard-00-01.lzwedug.mongodb.net:27017,ac-fzxnruh-shard-00-02.lzwedug.mongodb.net:27017/?ssl=true&replicaSet=atlas-rq2nk0-shard-0&authSource=admin&appName=Cluster0"
    PORT=5000
    ```
 4. Start the backend development server:
@@ -53,11 +53,13 @@ The frontend implements a Kanban-style board to view and move candidates through
    ```bash
    npm install
    ```
+   Create a `.env` file in the frontend directory to link to the backend:
+   `VITE_API_BASE_URL=http://localhost:5000`
 3. Start the development server:
    ```bash
    npm run dev
    ```
-   _The frontend will run on the port provided by Vite, usually `http://localhost:5173`._
+   _The frontend will run on the port provided by Vite `http://localhost:5173`._
 
 ## Architecture and Technical Decisions
 

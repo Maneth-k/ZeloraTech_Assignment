@@ -9,7 +9,7 @@ import FilterBar from "./components/FilterBar";
 import KanbanBoard from "./components/KanbanBoard";
 import TabPlaceholder from "./components/TabPlaceholder";
 
-const API_URL = "http://localhost:5000/api/candidates";
+const API_URL = import.meta.env.VITE_API_URL;
 
 const COLUMNS = [
   { id: "Applying Period", title: "Applying Period", color: "#FF7D01" },
@@ -23,7 +23,11 @@ function App() {
   const queryClient = useQueryClient();
 
   // Fetch candidates using React Query
-  const { data: rawCandidates = [], isLoading, isError } = useQuery({
+  const {
+    data: rawCandidates = [],
+    isLoading,
+    isError,
+  } = useQuery({
     queryKey: ["candidates"],
     queryFn: async () => {
       const response = await fetch(API_URL);
@@ -33,7 +37,9 @@ function App() {
     },
   });
 
-  const candidates = Array.isArray(rawCandidates) ? rawCandidates : (rawCandidates?.data || []);
+  const candidates = Array.isArray(rawCandidates)
+    ? rawCandidates
+    : rawCandidates?.data || [];
 
   // Mutation for updating candidate stage
   const updateMutation = useMutation({
@@ -52,7 +58,7 @@ function App() {
       const previousCandidates = queryClient.getQueryData(["candidates"]);
 
       queryClient.setQueryData(["candidates"], (old) => {
-        const currentData = Array.isArray(old) ? old : (old?.data || []);
+        const currentData = Array.isArray(old) ? old : old?.data || [];
         return currentData.map((c) => (c.id === id ? { ...c, stage } : c));
       });
 
@@ -70,7 +76,7 @@ function App() {
 
   const onDragEnd = (result) => {
     const { destination, source, draggableId } = result;
-    console.log(destination,source,draggableId)
+    console.log(destination, source, draggableId);
     if (!destination) return;
     if (
       destination.droppableId === source.droppableId &&
@@ -81,8 +87,12 @@ function App() {
     updateMutation.mutate({ id: draggableId, stage: destination.droppableId });
   };
 
-  if (isLoading) return <div className="loading-state">Loading Candidates...</div>;
-  if (isError) return <div className="error-state">Error fetching data. Please try again.</div>;
+  if (isLoading)
+    return <div className="loading-state">Loading Candidates...</div>;
+  if (isError)
+    return (
+      <div className="error-state">Error fetching data. Please try again.</div>
+    );
 
   return (
     <div className="layout">
@@ -92,7 +102,7 @@ function App() {
         <TopNav />
         <div className="content-wrapper">
           <JobHeader activeTab={activeTab} setActiveTab={setActiveTab} />
-          
+
           {activeTab === "Candidates" ? (
             <>
               <FilterBar />
