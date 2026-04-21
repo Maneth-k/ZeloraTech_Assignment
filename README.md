@@ -4,14 +4,14 @@
 
 This is a full-stack recruitment pipeline interface that includes both a React frontend and an Express Node.js backend.
 
-The frontend implements a Kanban-style board to view and move candidates through different stages (Applying Period, Screening, Interview, Test). The backend provides a RESTful API to manage the candidates data.
+The frontend implements a Kanban-style board to view and move candidates through different stages (Applying Period, Screening, Interview, Test). The backend provides a RESTful API to manage candidate data, now empowered by **MongoDB** for robust and persistent data storage.
 
 ## Features
 
 - **Frontend**: Built with React (Vite) and plain CSS (CSS Modules approach without Tailwind).
-- **Backend**: Express.js server providing CRUD operations. In-memory data store for simplicity and ease of testing.
-- **Interactions**: Drag and drop capabilities to move candidates across stages.
-- **Responsive**: The UI adapts to different screen sizes.
+- **Backend**: Express.js server providing CRUD operations, integrated tightly with **MongoDB** (via Mongoose) to maintain a scalable data model.
+- **Interactions**: Drag and drop capabilities to move candidates seamlessly across respective stages.
+- **Responsive**: The UI adapts effectively to different screen sizes.
 
 ## Setup Instructions
 
@@ -19,6 +19,7 @@ The frontend implements a Kanban-style board to view and move candidates through
 
 - Node.js (v14 or higher)
 - npm or yarn
+- **MongoDB** (A local instance or a cloud-based cluster like MongoDB Atlas)
 
 ### Running the Backend
 
@@ -30,11 +31,17 @@ The frontend implements a Kanban-style board to view and move candidates through
    ```bash
    npm install
    ```
-3. Start the backend server:
-   ```bash
-   npm start
+3. Establish Environment Variables:
+   Create a `.env` file within the `backend` directory and add your MongoDB connection URI and desired Port:
+   ```env
+   MONGO_URI=mongodb://127.0.0.1:27017/recruitment_pipeline  # Adjust according to your real MongoDB URI
+   PORT=5000
    ```
-   _The backend will run on `http://localhost:5000`_
+4. Start the backend development server:
+   ```bash
+   npm run dev
+   ```
+   > **Note**: We use `nodemon` for the backend. Executing the `npm run dev` script will automatically reload the API whenever backend files are modified. _The backend usually runs on `http://localhost:5000`._
 
 ### Running the Frontend
 
@@ -52,8 +59,9 @@ The frontend implements a Kanban-style board to view and move candidates through
    ```
    _The frontend will run on the port provided by Vite, usually `http://localhost:5173`._
 
-## Assumptions and Decisions
+## Architecture and Technical Decisions
 
-- **Data storage**: The backend uses an in-memory array to store candidate data. This is to avoid requiring complex database setups (e.g., MongoDB, PostgreSQL) for whoever reviews the code, making it instantly runnable.
-- **Drag and Drop**: Reused the well-supported `@hello-pangea/dnd` (or `react-beautiful-dnd`) library to provide clean, accessible drag-and-drop interactions across the Kanban columns.
-- **Styling**: All generic CSS is scoped logically to standard files. Vanilla CSS is used, showcasing a premium, modern design matching standard dashboard aesthetics.
+- **Data Storage (MongoDB)**: We transitioned from a simplified in-memory architecture to **MongoDB** to assure scalable, reliable, and persistent storage of our candidate data pipeline. Data modeling is handled rigorously using Mongoose.
+- **Development Workflow (Nodemon)**: The backend development environment is equipped with **nodemon**, enabling hot reloads which markedly accelerate the development and debugging lifecycle.
+- **Drag and Drop**: Incorporates the highly supported `@hello-pangea/dnd` (or equivalent options like `react-beautiful-dnd`) to implement accessible and robust drag-and-drop interactions across the entire board.
+- **Styling Mechanics**: Employs deeply scoped Vanilla CSS to deliver optimal modularity while driving a premium, modern dashboard aesthetic without relying on external CSS frameworks.
