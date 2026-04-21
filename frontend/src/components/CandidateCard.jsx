@@ -26,7 +26,7 @@ export default function CandidateCard({ candidate, index }) {
 
   const deleteMutation = useMutation({
     mutationFn: async (id) => {
-      const res = await fetch(`http://localhost:5000/api/candidates/${id}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/candidates/${id}`, {
         method: "DELETE",
       });
       if (!res.ok) throw new Error("Failed to delete candidate");

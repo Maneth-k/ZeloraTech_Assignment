@@ -21,8 +21,8 @@ export default function AddCandidateModal({ onClose, onSuccess, initialData }) {
     mutationFn: async (candidateData) => {
       const isEdit = !!initialData;
       const url = isEdit
-        ? `http://localhost:5000/api/candidates/${initialData.id}`
-        : "http://localhost:5000/api/candidates";
+        ? `${import.meta.env.VITE_API_BASE_URL}/api/candidates/${initialData.id}`
+        : `${import.meta.env.VITE_API_BASE_URL}/api/candidates`;
       const method = isEdit ? "PUT" : "POST";
 
       const res = await fetch(url, {
